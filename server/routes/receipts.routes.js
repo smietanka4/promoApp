@@ -87,7 +87,7 @@ function validateReceiptPayload(body) {
   };
 }
 
-// 1. Skanowanie zdjęcia paragonu przez Gemini (bez zapisu do DB - Human-in-the-loop)
+// 1. Analyze receipt image with Gemini (not persisted yet - Human-in-the-loop)
 router.post('/scan', receiptUpload.single('receipt'), async (req, res, next) => {
   try {
     if (!req.file) {
@@ -103,7 +103,7 @@ router.post('/scan', receiptUpload.single('receipt'), async (req, res, next) => 
   }
 });
 
-// 2. Zapis zweryfikowanego paragonu i jego pozycji w transakcji PostgreSQL
+// 2. Persist verified receipt and items inside a PostgreSQL transaction
 router.post('/', async (req, res, next) => {
   const { error, data } = validateReceiptPayload(req.body);
   if (error) {
@@ -172,7 +172,7 @@ router.post('/', async (req, res, next) => {
   }
 });
 
-// 3. Lista paragonów użytkownika (opcjonalny filtr ?month=YYYY-MM)
+// 3. List user receipts (optional ?month=YYYY-MM filter)
 router.get('/', async (req, res, next) => {
   try {
     const { month } = req.query;
@@ -232,7 +232,7 @@ router.get('/', async (req, res, next) => {
   }
 });
 
-// 4. Usunięcie paragonu należącego do zalogowanego użytkownika
+// 4. Delete a receipt owned by the authenticated user
 router.delete('/:id', async (req, res, next) => {
   try {
     const receiptId = Number(req.params.id);

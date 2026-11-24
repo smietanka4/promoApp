@@ -1,31 +1,29 @@
 PromoApp Non-Commercial License
 Copyright (c) 2026 PromoApp Contributors
 
-Niniejsze oprogramowanie jest udostępniane w modelu source-available wyłącznie
-do celów niekomercyjnych (użytek prywatny, edukacyjny, badawczy i hobbystyczny).
+This repository is made available under a source-available, non-commercial
+license. You may use this software only for non-commercial purposes.
 
-1. DOZWOLONY UŻYTEK (NIEKOMERCYJNY)
-   Każda osoba może bezpłatnie pobierać, uruchamiać, kopiować, modyfikować oraz
-   rozpowszechniać kod źródłowy i wersje zmodyfikowane oprogramowania, pod
-   warunkiem, że:
-   a) użycie nie ma charakteru komercyjnego ani zarobkowego (w tym oferowanie
-      aplikacji jako płatnej usługi SaaS, sprzedaż kopii, monetyzacja reklamami
-      lub wykorzystanie wewnątrz działalności gospodarczej w celu osiągnięcia
-      korzyści majątkowej),
-   b) we wszystkich kopiach i utworach zależnych zostanie zachowana niniejsza
-      informacja o prawach autorskich i warunkach licencji.
+1. Permitted Non-Commercial Use
+   You may download, run, study, modify, and share the source code and
+   modified versions of this software free of charge, provided that:
+   - Your use is strictly non-commercial (personal, educational, research, or
+     hobby use).
+   - You keep this copyright notice and license text intact in any copies or
+     derived works.
 
-2. ZAKAZ UŻYTKU KOMERCYJNEGO
-   Wykorzystanie oprogramowania lub jego części w celach zarobkowych wymaga
-   uprzedniej, pisemnej zgody właściciela praw autorskich (licencja komercyjna).
+2. Commercial Use Restriction
+   You may not use this software, in whole or in part, for commercial gain
+   without prior written permission from the copyright holder. Restricted
+   activities include selling copies, offering the software as a paid hosted
+   or SaaS product, monetizing it through ads, or deploying it inside a
+   for-profit organization to support commercial operations.
 
-3. BRAK GWARANCJI
-   Oprogramowanie jest dostarczane w stanie "TAKIM, JAKIM JEST" ("AS IS"),
-   bez jakichkolwiek gwarancji wyraźnych lub dorozumianych. Autorzy nie ponoszą
-   odpowiedzialności za jakiekolwiek szkody wynikające z jego używania.
+3. No Warranty
+   The software is provided in its current state with no promises, guarantees,
+   or liability of any kind. You use it at your own risk, and the authors are
+   not responsible for any loss or damage arising from its use.
 
----
-Uwaga: Jeśli potrzebujesz ustandaryzowanego tekstu prawnego rozpoznawanego
-przez narzędzia SPDX / GitHub, zalecana jest oficjalna licencja
-PolyForm Noncommercial License 1.0.0 (SPDX: PolyForm-Noncommercial-1.0.0):
-https://polyformproject.org/licenses/noncommercial/1.0.0/
+Note: For a standardized SPDX-recognized non-commercial software license,
+consider replacing this file with the official PolyForm Noncommercial
+License 1.0.0 from https://polyformproject.org/licenses/noncommercial/1.0.0/

@@ -126,7 +126,7 @@ export default function ReceiptReview({ scanResult, onCancel, onSaved }) {
 
   return (
     <div className="min-h-dvh bg-slate-50 pb-28">
-      {/* Nagłówek */}
+      {/* Header */}
       <header className="sticky top-0 z-20 bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-3">
         <div className="max-w-lg mx-auto flex items-center justify-between">
           <button
@@ -144,7 +144,7 @@ export default function ReceiptReview({ scanResult, onCancel, onSaved }) {
       </header>
 
       <form onSubmit={handleSubmit} className="max-w-lg mx-auto px-4 pt-4 space-y-4">
-        {/* Podsumowanie na żywo */}
+        {/* Live totals summary */}
         <div className="grid grid-cols-2 gap-3">
           <div className="rounded-2xl bg-emerald-600 text-white p-3.5 shadow-sm">
             <p className="text-xs text-emerald-100 font-medium">Zaoszczędzono</p>
@@ -156,7 +156,7 @@ export default function ReceiptReview({ scanResult, onCancel, onSaved }) {
           </div>
         </div>
 
-        {/* Dane sklepu i data */}
+        {/* Store name and purchase date */}
         <div className="rounded-2xl bg-white border border-slate-200 p-4 space-y-3 shadow-sm">
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div>
@@ -187,7 +187,7 @@ export default function ReceiptReview({ scanResult, onCancel, onSaved }) {
           </div>
         )}
 
-        {/* Lista pozycji do szybkiej korekty */}
+        {/* Editable line items */}
         <div className="space-y-3">
           <div className="flex items-center justify-between px-1">
             <h2 className="text-sm font-semibold text-slate-700">Rozpoznane produkty</h2>
@@ -291,7 +291,7 @@ export default function ReceiptReview({ scanResult, onCancel, onSaved }) {
           ))}
         </div>
 
-        {/* Dolny pasek akcji */}
+        {/* Bottom action bar */}
         <div className="fixed bottom-0 inset-x-0 z-20 bg-white/95 backdrop-blur border-t border-slate-200 px-4 pt-3 safe-bottom">
           <div className="max-w-lg mx-auto flex gap-3">
             <button

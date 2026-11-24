@@ -4,7 +4,7 @@ import { registerSW } from 'virtual:pwa-register';
 import App from './App.jsx';
 import './index.css';
 
-// Rejestracja Service Workera PWA (autoUpdate)
+// Register PWA Service Worker (autoUpdate)
 registerSW({ immediate: true });
 
 createRoot(document.getElementById('root')).render(

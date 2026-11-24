@@ -24,13 +24,13 @@ const app = express();
 const isProd = process.env.NODE_ENV === 'production';
 const PORT = Number(process.env.PORT) || 3001;
 const CLIENT_URL = process.env.CLIENT_URL || 'http://localhost:5173';
-const SESSION_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000; // 30 dni
+const SESSION_MAX_AGE_MS = 30 * 24 * 60 * 60 * 1000; // 30 days
 
 if (!process.env.SESSION_SECRET) {
   throw new Error('Brak zmiennej środowiskowej SESSION_SECRET.');
 }
 
-// Niezbędne za reverse proxy (Nginx, Render, Railway, Cloudflare), aby ciasteczka secure działały poprawnie
+// Required behind a reverse proxy (Nginx, Render, Railway, Cloudflare) for secure cookies
 app.set('trust proxy', 1);
 
 app.use(
@@ -48,20 +48,20 @@ app.use(
 
 app.use(express.json({ limit: '2mb' }));
 
-// Magazyn sesji w PostgreSQL (tabela "session")
+// PostgreSQL session store ("session" table)
 const PgSession = connectPgSimple(session);
 app.use(
   session({
     store: new PgSession({
       pool,
       tableName: 'session',
-      pruneSessionInterval: 60 * 60, // Czyszczenie wygasłych sesji co godzinę
+      pruneSessionInterval: 60 * 60, // Prune expired sessions every hour
     }),
     name: 'promoapp.sid',
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    rolling: true, // Odświeża 30-dniowy czas życia sesji przy aktywności użytkownika w PWA
+    rolling: true, // Refresh 30-day expiry on user activity in PWA
     proxy: isProd,
     cookie: {
       maxAge: SESSION_MAX_AGE_MS,
@@ -72,12 +72,12 @@ app.use(
   })
 );
 
-// Konfiguracja Passport.js (Google OAuth 2.0)
+// Configure Passport.js (Google OAuth 2.0)
 configurePassport();
 app.use(passport.initialize());
 app.use(passport.session());
 
-// Endpoint kontrolny (healthcheck)
+// Healthcheck endpoint
 app.get('/api/health', async (_req, res) => {
   try {
     await pool.query('SELECT 1');
@@ -87,12 +87,12 @@ app.get('/api/health', async (_req, res) => {
   }
 });
 
-// Routing API
+// API routes
 app.use('/api/auth', authRoutes);
 app.use('/api/receipts', receiptsRoutes);
 app.use('/api/dashboard', dashboardRoutes);
 
-// Serwowanie zbudowanego frontendu PWA na produkcji (opcjonalny tryb single-service)
+// Serve built PWA frontend in production (single-service deployment)
 const clientDistPath = path.resolve(__dirname, '../client/dist');
 if (isProd && fs.existsSync(clientDistPath)) {
   app.use(express.static(clientDistPath));
@@ -104,12 +104,12 @@ if (isProd && fs.existsSync(clientDistPath)) {
   });
 }
 
-// Obsługa nieznanych endpointów API
+// Handle unknown API routes
 app.use('/api', (_req, res) => {
   res.status(404).json({ error: 'Nie znaleziono zasobu API.' });
 });
 
-// Globalny handler błędów (w tym błędów Multera)
+// Global error handler (including Multer upload errors)
 app.use((err, _req, res, _next) => {
   if (err instanceof multer.MulterError) {
     if (err.code === 'LIMIT_FILE_SIZE') {

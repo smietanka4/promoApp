@@ -40,7 +40,7 @@ function getMonthRange(monthParam) {
   return { month: raw, startDate, endDate };
 }
 
-// Podsumowanie miesięczne: wydane vs zaoszczędzone + rozbicie na kategorie
+// Monthly summary: total paid vs total saved + category breakdown
 router.get('/summary', async (req, res, next) => {
   try {
     const { month, startDate, endDate } = getMonthRange(req.query.month);

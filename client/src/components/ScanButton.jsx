@@ -11,7 +11,7 @@ export default function ScanButton({ onScanned, onError }) {
 
   async function handleFileChange(event) {
     const file = event.target.files?.[0];
-    // Reset inputa, aby umożliwić ponowne wybranie tego samego zdjęcia
+    // Reset input value so the user can re-select the same file if needed
     event.target.value = '';
     if (!file) return;
 

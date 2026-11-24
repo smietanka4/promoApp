@@ -43,7 +43,7 @@ export default defineConfig({
       },
       workbox: {
         globPatterns: ['**/*.{js,css,html,ico,png,svg,woff2}'],
-        // Krytyczne dla OAuth i API: Service Worker nigdy nie przechwytuje ścieżek /api/*
+        // Critical for OAuth and API: never intercept /api/* paths in the Service Worker
         navigateFallbackDenylist: [/^\/api/],
         runtimeCaching: [
           {

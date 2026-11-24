@@ -77,7 +77,7 @@ export default function Dashboard({ user, onLogout, onReceiptScanned, refreshTok
 
   return (
     <div className="min-h-dvh bg-slate-50 pb-28">
-      {/* Górny pasek */}
+      {/* Top header */}
       <header className="sticky top-0 z-20 bg-white/95 backdrop-blur border-b border-slate-200 px-4 py-3">
         <div className="max-w-lg mx-auto flex items-center justify-between">
           <div>
@@ -97,7 +97,7 @@ export default function Dashboard({ user, onLogout, onReceiptScanned, refreshTok
       </header>
 
       <main className="max-w-lg mx-auto px-4 pt-4 space-y-5">
-        {/* Wybór miesiąca */}
+        {/* Month selector */}
         <div className="flex items-center justify-between rounded-2xl bg-white border border-slate-200 px-3 py-2 shadow-sm">
           <button
             type="button"
@@ -125,7 +125,7 @@ export default function Dashboard({ user, onLogout, onReceiptScanned, refreshTok
           </div>
         )}
 
-        {/* Karta Hero: Oszczędności na pierwszym planie */}
+        {/* Hero card: promotional savings front and center */}
         <section className="rounded-3xl bg-gradient-to-br from-emerald-600 via-emerald-600 to-teal-700 text-white p-5 shadow-lg shadow-emerald-600/20">
           <div className="flex items-center justify-between">
             <span className="inline-flex items-center gap-1.5 text-xs font-semibold uppercase tracking-wide text-emerald-100">
@@ -163,7 +163,7 @@ export default function Dashboard({ user, onLogout, onReceiptScanned, refreshTok
           </div>
         </section>
 
-        {/* Rozbicie na kategorie */}
+        {/* Category breakdown */}
         <section className="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
           <div className="flex items-center justify-between mb-3">
             <h2 className="text-sm font-bold text-slate-900">Rozbicie na kategorie</h2>
@@ -214,7 +214,7 @@ export default function Dashboard({ user, onLogout, onReceiptScanned, refreshTok
           )}
         </section>
 
-        {/* Ostatnie paragony w miesiącu */}
+        {/* Recent receipts in selected month */}
         <section className="rounded-2xl bg-white border border-slate-200 p-4 shadow-sm">
           <div className="flex items-center gap-2 mb-3">
             <Receipt className="w-4 h-4 text-slate-500" />
@@ -262,7 +262,7 @@ export default function Dashboard({ user, onLogout, onReceiptScanned, refreshTok
         </section>
       </main>
 
-      {/* Stały przycisk skanowania u dołu ekranu (Mobile-First) */}
+      {/* Sticky bottom scan CTA (Mobile-First) */}
       <div className="fixed bottom-0 inset-x-0 z-20 bg-white/90 backdrop-blur border-t border-slate-200 px-4 pt-3 safe-bottom">
         <div className="max-w-lg mx-auto">
           <ScanButton onScanned={onReceiptScanned} onError={(msg) => setError(msg)} />

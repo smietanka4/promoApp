@@ -5,7 +5,7 @@ const router = Router();
 
 const getClientUrl = () => process.env.CLIENT_URL || 'http://localhost:5173';
 
-// Inicjacja logowania Google OAuth 2.0
+// Initiate Google OAuth 2.0 login
 router.get(
   '/google',
   passport.authenticate('google', {
@@ -14,7 +14,7 @@ router.get(
   })
 );
 
-// Callback z Google OAuth 2.0
+// Google OAuth 2.0 callback
 router.get(
   '/google/callback',
   passport.authenticate('google', {
@@ -25,7 +25,7 @@ router.get(
   }
 );
 
-// Pobranie aktualnie zalogowanego użytkownika (weryfikacja sesji PWA)
+// Return currently authenticated user (PWA session check)
 router.get('/me', (req, res) => {
   if (!req.isAuthenticated || !req.isAuthenticated() || !req.user) {
     return res.status(200).json({ authenticated: false, user: null });
@@ -40,7 +40,7 @@ router.get('/me', (req, res) => {
   });
 });
 
-// Wylogowanie i usunięcie sesji z PostgreSQL
+// Log out and destroy session in PostgreSQL
 router.post('/logout', (req, res, next) => {
   req.logout((logoutErr) => {
     if (logoutErr) {

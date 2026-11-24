@@ -1,5 +1,5 @@
 # =============================================================================
-# Stage 1: Build frontendu PWA (React + Vite + Tailwind + vite-plugin-pwa)
+# Stage 1: Build PWA frontend (React + Vite + Tailwind + vite-plugin-pwa)
 # =============================================================================
 FROM node:22-alpine AS client-builder
 
@@ -12,7 +12,7 @@ COPY client/ ./
 RUN npm run build
 
 # =============================================================================
-# Stage 2: Produkcja (Node.js + Express + wbudowany statyczny build PWA)
+# Stage 2: Production runtime (Node.js + Express + static PWA bundle)
 # =============================================================================
 FROM node:22-alpine AS production
 
@@ -25,7 +25,7 @@ RUN if [ -f package-lock.json ]; then npm ci --omit=dev; else npm install --omit
 COPY server/ ./
 COPY --from=client-builder /app/client/dist /app/client/dist
 
-# Uruchomienie jako użytkownik bez uprawnień root
+# Run as non-root user
 RUN chown -R node:node /app
 USER node
 

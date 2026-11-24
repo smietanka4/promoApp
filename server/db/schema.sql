@@ -1,9 +1,9 @@
 -- =============================================================================
--- PromoApp - Schemat bazy danych PostgreSQL
--- Aplikacja PWA do skanowania paragonów i śledzenia oszczędności z promocji
+-- PromoApp - PostgreSQL Database Schema
+-- PWA for scanning Polish receipts and tracking promotional savings
 -- =============================================================================
 
--- 1. Użytkownicy (logowanie przez Google OAuth 2.0)
+-- 1. Users (authenticated via Google OAuth 2.0)
 CREATE TABLE IF NOT EXISTS users (
     id SERIAL PRIMARY KEY,
     google_id VARCHAR(255) NOT NULL UNIQUE,
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS users (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- 2. Sesje użytkowników (standardowa tabela wymagana przez connect-pg-simple)
+-- 2. User sessions (standard table required by connect-pg-simple)
 CREATE TABLE IF NOT EXISTS "session" (
     "sid" VARCHAR NOT NULL COLLATE "default" PRIMARY KEY,
     "sess" JSON NOT NULL,
@@ -21,7 +21,7 @@ CREATE TABLE IF NOT EXISTS "session" (
 
 CREATE INDEX IF NOT EXISTS "IDX_session_expire" ON "session" ("expire");
 
--- 3. Zeskanowane i zatwierdzone paragony
+-- 3. Scanned and verified receipts
 CREATE TABLE IF NOT EXISTS receipts (
     id SERIAL PRIMARY KEY,
     user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -33,11 +33,11 @@ CREATE TABLE IF NOT EXISTS receipts (
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );
 
--- Indeks przyspieszający zapytania Dashboardu (podsumowania miesięczne per użytkownik)
+-- Index optimizing monthly dashboard queries per user
 CREATE INDEX IF NOT EXISTS idx_receipts_user_date
     ON receipts (user_id, receipt_date DESC);
 
--- 4. Pozycje na paragonie (produkty, kategorie, kwoty zapłacone i rabaty)
+-- 4. Receipt line items (products, categories, paid amounts, and discounts)
 CREATE TABLE IF NOT EXISTS receipt_items (
     id SERIAL PRIMARY KEY,
     receipt_id INTEGER NOT NULL REFERENCES receipts(id) ON DELETE CASCADE,
@@ -54,13 +54,13 @@ CREATE TABLE IF NOT EXISTS receipt_items (
             'Inne'
         )
     ),
-    -- NUMERIC(10, 3) obsługuje zarówno sztuki (np. 2), jak i towary na wagę (np. 0.456 kg)
+    -- NUMERIC(10, 3) supports both discrete units (e.g. 2) and weighted items (e.g. 0.456 kg)
     quantity NUMERIC(10, 3) NOT NULL DEFAULT 1.000 CHECK (quantity > 0),
     paid_amount NUMERIC(10, 2) NOT NULL DEFAULT 0.00 CHECK (paid_amount >= 0),
     discount_amount NUMERIC(10, 2) NOT NULL DEFAULT 0.00 CHECK (discount_amount >= 0)
 );
 
--- Indeksy przyspieszające złączenia i agregację wydatków/oszczędności wg kategorii
+-- Indexes optimizing joins and category-level spending/savings aggregations
 CREATE INDEX IF NOT EXISTS idx_receipt_items_receipt_id
     ON receipt_items (receipt_id);
 
