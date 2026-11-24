@@ -1,0 +1,134 @@
+name: CI/CD
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  server-check:
+    name: Backend – SQL, składnia i testy
+    runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:16-alpine
+        env:
+          POSTGRES_USER: postgres
+          POSTGRES_PASSWORD: postgres
+          POSTGRES_DB: promo_app_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Pobierz repozytorium
+        uses: actions/checkout@v4
+
+      - name: Konfiguracja Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalacja zależności backendu
+        working-directory: server
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+
+      - name: Weryfikacja składni JS i testów jednostkowych
+        working-directory: server
+        run: |
+          npm run check
+          npm test
+
+      - name: Weryfikacja schematu PostgreSQL (w tym idempotentność)
+        env:
+          PGPASSWORD: postgres
+        run: |
+          psql -h localhost -U postgres -d promo_app_test -v ON_ERROR_STOP=1 -f server/db/schema.sql
+          psql -h localhost -U postgres -d promo_app_test -v ON_ERROR_STOP=1 -f server/db/schema.sql
+
+  client-build:
+    name: Frontend PWA – build i manifest
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pobierz repozytorium
+        uses: actions/checkout@v4
+
+      - name: Konfiguracja Node.js 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+
+      - name: Instalacja zależności frontendu
+        working-directory: client
+        run: |
+          if [ -f package-lock.json ]; then npm ci; else npm install; fi
+
+      - name: Build produkcyjny PWA (Vite + Workbox)
+        working-directory: client
+        run: npm run build
+
+      - name: Weryfikacja artefaktów PWA (manifest + Service Worker)
+        run: |
+          test -f client/dist/index.html
+          test -f client/dist/manifest.webmanifest
+          test -f client/dist/sw.js
+
+  docker-build-and-deploy:
+    name: Docker build, publikacja GHCR i opcjonalny Deploy Hook
+    needs: [server-check, client-build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Pobierz repozytorium
+        uses: actions/checkout@v4
+
+      - name: Konfiguracja Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Logowanie do GitHub Container Registry (tylko push na main)
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+        uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Przygotowanie metadanych obrazu Docker
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ghcr.io/${{ github.repository }}
+          tags: |
+            type=sha,prefix=sha-
+            type=raw,value=latest,enable=${{ github.ref == 'refs/heads/main' }}
+
+      - name: Build (i push na main) obrazu Docker
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: ${{ github.event_name == 'push' && github.ref == 'refs/heads/main' }}
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Wyzwolenie Deploy Hook (Render / Railway), jeśli skonfigurowany
+        if: github.event_name == 'push' && github.ref == 'refs/heads/main' && secrets.DEPLOY_HOOK_URL != ''
+        env:
+          DEPLOY_HOOK_URL: ${{ secrets.DEPLOY_HOOK_URL }}
+        run: |
+          curl -fsSL -X POST "$DEPLOY_HOOK_URL"
+          echo "Deploy Hook wyzwolony pomyślnie."

@@ -1,0 +1,31 @@
+PromoApp Non-Commercial License
+Copyright (c) 2026 PromoApp Contributors
+
+Niniejsze oprogramowanie jest udostępniane w modelu source-available wyłącznie
+do celów niekomercyjnych (użytek prywatny, edukacyjny, badawczy i hobbystyczny).
+
+1. DOZWOLONY UŻYTEK (NIEKOMERCYJNY)
+   Każda osoba może bezpłatnie pobierać, uruchamiać, kopiować, modyfikować oraz
+   rozpowszechniać kod źródłowy i wersje zmodyfikowane oprogramowania, pod
+   warunkiem, że:
+   a) użycie nie ma charakteru komercyjnego ani zarobkowego (w tym oferowanie
+      aplikacji jako płatnej usługi SaaS, sprzedaż kopii, monetyzacja reklamami
+      lub wykorzystanie wewnątrz działalności gospodarczej w celu osiągnięcia
+      korzyści majątkowej),
+   b) we wszystkich kopiach i utworach zależnych zostanie zachowana niniejsza
+      informacja o prawach autorskich i warunkach licencji.
+
+2. ZAKAZ UŻYTKU KOMERCYJNEGO
+   Wykorzystanie oprogramowania lub jego części w celach zarobkowych wymaga
+   uprzedniej, pisemnej zgody właściciela praw autorskich (licencja komercyjna).
+
+3. BRAK GWARANCJI
+   Oprogramowanie jest dostarczane w stanie "TAKIM, JAKIM JEST" ("AS IS"),
+   bez jakichkolwiek gwarancji wyraźnych lub dorozumianych. Autorzy nie ponoszą
+   odpowiedzialności za jakiekolwiek szkody wynikające z jego używania.
+
+---
+Uwaga: Jeśli potrzebujesz ustandaryzowanego tekstu prawnego rozpoznawanego
+przez narzędzia SPDX / GitHub, zalecana jest oficjalna licencja
+PolyForm Noncommercial License 1.0.0 (SPDX: PolyForm-Noncommercial-1.0.0):
+https://polyformproject.org/licenses/noncommercial/1.0.0/
